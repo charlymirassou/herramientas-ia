@@ -767,77 +767,147 @@
     const meta = TOOL_META[state.tool];
     const lines = [];
 
-    // Rol
+    // ── Roles ricos y específicos ──────────────────────────────────────────────
     const roleMap = {
-      'Experto en el tema': `Actuá como un experto en el tema con amplio conocimiento y experiencia práctica.`,
-      'Redactor profesional': `Actuá como un redactor profesional con habilidad para comunicar con claridad y precisión.`,
-      'Docente o explicador': `Actuá como un docente que explica conceptos complejos de manera simple y accesible.`,
-      'Analista crítico': `Actuá como un analista crítico que examina la información con objetividad y rigor.`,
-      'Asistente genérico': `Sos un asistente útil, preciso y claro.`
+      'Experto en el tema': `Sos un experto con profundo conocimiento teórico y experiencia práctica en el área relevante a esta tarea. Tu forma de pensar es sistemática: identificás primero los aspectos clave, luego los desarrollás con rigor y cerrás con conclusiones bien fundamentadas. En tu comunicación sos preciso, evitás la ambigüedad y respaldás cada afirmación con argumentos o evidencia.`,
+      'Redactor profesional': `Sos un redactor profesional con amplia experiencia en comunicación escrita para distintos públicos y registros. Tu forma de pensar parte de la claridad del mensaje: antes de escribir, definís el objetivo del texto, el lector al que va dirigido y el efecto que debe producir. Escribís con estructura clara, frases directas y vocabulario preciso; evitás el relleno y cuidás el ritmo de cada párrafo.`,
+      'Docente o explicador': `Sos un docente experimentado con habilidad para hacer accesible lo complejo. Tu enfoque pedagógico parte de lo que el lector ya sabe para construir sobre esa base, usando analogías, ejemplos concretos y preguntas guía cuando es necesario. Explicás un concepto a la vez, verificás la comprensión antes de avanzar y usás un lenguaje claro, sin sacrificar la profundidad cuando el tema lo requiere.`,
+      'Analista crítico': `Sos un analista crítico con entrenamiento en pensamiento lógico, detección de sesgos y evaluación de evidencia. Tu forma de pensar es escéptica y rigurosa: no aceptás afirmaciones sin fundamento, explorás distintas perspectivas antes de concluir y señalás tanto los puntos fuertes como las debilidades de cualquier argumento o contenido. Te comunicás con objetividad, sin subjetivismos, y distinguís claramente los hechos de las interpretaciones.`,
+      'Asistente genérico': `Sos un asistente inteligente, metódico y orientado a resultados. Leés con atención cada instrucción, priorizás la utilidad práctica de tus respuestas y adaptás tu nivel de detalle a lo que la tarea requiere. Sos directo, organizado y confiable.`
     };
 
-    const roleText = roleMap[state.role] || 'Sos un asistente útil y preciso.';
+    const roleText = roleMap[state.role] || 'Sos un asistente inteligente, metódico y orientado a resultados. Leés con atención cada instrucción, priorizás la utilidad práctica de tus respuestas y adaptás tu nivel de detalle a lo que la tarea requiere.';
 
-    // Construir descripción de la tarea combinando propósito libre y tarea detallada
-    const purposeNote = state.customPurpose ? `Objetivo: ${state.customPurpose}` : null;
+    // ── Tono integrado al rol ──────────────────────────────────────────────────
+    const toneMap = {
+      formal:    'Tu registro es formal y profesional: usás vocabulario cuidado, evitás coloquialismos y mantenés distancia institucional sin perder claridad.',
+      neutro:    'Tu registro es neutro y objetivo: presentás la información sin juicios de valor, en tercera persona cuando corresponde, con un estilo equilibrado.',
+      simple:    'Tu registro es simple y accesible: priorizás frases cortas, palabras de uso común y explicaciones que cualquier persona pueda entender sin conocimientos previos.',
+      tecnico:   'Tu registro es técnico y especializado: usás la terminología propia del campo, asumís que el lector tiene formación en el área y no simplificás conceptos que no lo requieren.',
+      amigable:  'Tu registro es amigable y cercano: usás segunda persona, un tono cálido y natural, como si le explicaras algo a alguien de confianza.'
+    };
 
-    // Para NotebookLM, adaptamos el formato
+    // ── Metodología por propósito ──────────────────────────────────────────────
+    const purposeKeyMap = {
+      'Redactar o escribir algo':            'redactar',
+      'Resumir o sintetizar información':    'resumir',
+      'Analizar o evaluar un contenido':     'analizar',
+      'Generar ideas o hacer lluvia de ideas': 'ideas',
+      'Transformar o convertir un texto':    'transformar',
+      'Responder preguntas o investigar':    'investigar'
+    };
+
+    const methodologyMap = {
+      redactar: `METODOLOGÍA:
+Seguí estos pasos en orden:
+1. Identificá el objetivo comunicacional del texto y el perfil del lector.
+2. Definí la estructura antes de escribir: introducción, desarrollo, cierre.
+3. Escribí el texto respetando esa estructura y el tono indicado.
+4. Revisá que cada párrafo aporte algo distinto y que el texto fluya con coherencia.`,
+
+      resumir: `METODOLOGÍA:
+Seguí estos pasos en orden:
+1. Leé o analizá el contenido completo antes de comenzar.
+2. Identificá las ideas principales y descartá los detalles secundarios.
+3. Reorganizá esas ideas en un orden lógico que facilite la comprensión.
+4. Redactá el resumen en el formato y extensión indicados, sin agregar información que no esté en el original.`,
+
+      analizar: `METODOLOGÍA:
+Seguí estos pasos en orden:
+1. Describí brevemente el objeto de análisis y su contexto.
+2. Identificá los elementos más relevantes para evaluar (criterios, dimensiones, variables).
+3. Analizá cada elemento con objetividad, señalando fortalezas y debilidades.
+4. Elaborá una conclusión que integre los hallazgos y responda a la pregunta central.`,
+
+      ideas: `METODOLOGÍA:
+Seguí estos pasos en orden:
+1. Delimitá el problema o desafío que se quiere abordar.
+2. Generá un conjunto amplio de ideas sin filtrar ni juzgar en esta etapa.
+3. Agrupá las ideas por categorías o ejes temáticos.
+4. Destacá las 3 a 5 más prometedoras con una breve justificación de cada una.`,
+
+      transformar: `METODOLOGÍA:
+Seguí estos pasos en orden:
+1. Analizá el texto original para entender su contenido, intención y registro actual.
+2. Identificá qué debe cambiar (formato, tono, extensión, estructura, estilo) y qué debe mantenerse.
+3. Realizá la transformación preservando la fidelidad al contenido original.
+4. Verificá que el resultado cumple con el formato y tono solicitados.`,
+
+      investigar: `METODOLOGÍA:
+Seguí estos pasos en orden:
+1. Reformulá la pregunta o tema para asegurarte de entender qué se quiere saber exactamente.
+2. Organizá la respuesta de lo general a lo específico.
+3. Fundamentá cada afirmación con argumentos sólidos o datos concretos.
+4. Si hay perspectivas distintas sobre el tema, presentalas de forma equilibrada antes de concluir.`
+    };
+
+    // ── Formato enriquecido ────────────────────────────────────────────────────
+    const formatMap = {
+      'Texto corrido / párrafos': 'Presentá tu respuesta en párrafos bien construidos, con ideas completas en cada uno. No uses listas ni viñetas. El texto debe fluir de forma coherente de principio a fin.',
+      'Lista de puntos': 'Organizá tu respuesta en una lista de puntos numerados o con viñetas. Cada punto debe expresar una idea completa y diferente. Evitá repetir conceptos entre puntos.',
+      'Tabla': 'Presentá la información en una tabla clara, con encabezados descriptivos en cada columna. Cada fila debe corresponder a un elemento distinto. Si el contenido no puede organizarse en tabla, justificá brevemente por qué y usá el formato más apropiado.',
+      'Esquema o estructura': 'Organizá la respuesta con títulos principales (##) y subtítulos (###) cuando corresponda. Cada sección debe tener contenido sustancial, no solo un encabezado. El esquema debe reflejar una jerarquía lógica del tema.',
+      'Respuesta corta y directa': 'Respondé de forma concisa: máximo 3 a 5 oraciones o puntos. Priorizá la información más importante. No justifiques ni desarrolles más de lo necesario.'
+    };
+
+    // ── Construir prompt ───────────────────────────────────────────────────────
+    const purposeNote = state.customPurpose ? state.customPurpose : null;
+    const toneNote = state.tone && toneMap[state.tone] ? toneMap[state.tone] : null;
+
+    // Determinar clave de metodología
+    const purposeKey = purposeKeyMap[state.purpose] || null;
+    const methodology = purposeKey ? methodologyMap[purposeKey] : null;
+
     if (state.tool === 'notebooklm') {
       lines.push(`[INSTRUCCIÓN PARA NOTEBOOKLM]`);
       lines.push(``);
-      lines.push(`Basándote exclusivamente en los documentos que tengo cargados como fuentes:`);
-      lines.push(``);
-      const taskFull = [purposeNote, state.task].filter(Boolean).join('\n');
-      lines.push(`TAREA: ${taskFull}`);
-      if (state.context) {
-        lines.push(``);
-        lines.push(`CONTEXTO ADICIONAL: ${state.context}`);
-      }
-    } else {
-      lines.push(roleText);
+      lines.push(`Basándote exclusivamente en los documentos que tengo cargados como fuentes, sin agregar información externa ni suposiciones propias:`);
       lines.push(``);
       if (purposeNote) {
         lines.push(`OBJETIVO:`);
-        lines.push(state.customPurpose);
+        lines.push(purposeNote);
         lines.push(``);
       }
       lines.push(`TAREA:`);
       lines.push(state.task);
       if (state.context) {
         lines.push(``);
+        lines.push(`CONTEXTO ADICIONAL:`);
+        lines.push(state.context);
+      }
+    } else {
+      // Rol + tono integrados en el mismo bloque de identidad
+      let identity = roleText;
+      if (toneNote) identity += ` ${toneNote}`;
+      lines.push(identity);
+      lines.push(``);
+
+      if (purposeNote) {
+        lines.push(`OBJETIVO:`);
+        lines.push(purposeNote);
+        lines.push(``);
+      }
+
+      lines.push(`TAREA:`);
+      lines.push(state.task);
+
+      if (state.context) {
+        lines.push(``);
         lines.push(`CONTEXTO:`);
         lines.push(state.context);
       }
+
+      if (methodology) {
+        lines.push(``);
+        lines.push(methodology);
+      }
     }
 
-    // Formato
-    const formatMap = {
-      'Texto corrido / párrafos': 'Respondé en párrafos bien redactados, sin listas.',
-      'Lista de puntos': 'Organizá la respuesta en una lista de puntos claros.',
-      'Tabla': 'Presentá la información en formato de tabla.',
-      'Esquema o estructura': 'Organizá la respuesta con títulos y subtítulos.',
-      'Respuesta corta y directa': 'Respondé de forma concisa, sin extenderte innecesariamente.'
-    };
-
+    // Formato de salida
     if (state.format) {
       lines.push(``);
-      lines.push(`FORMATO DE RESPUESTA:`);
+      lines.push(`FORMATO DE SALIDA:`);
       lines.push(formatMap[state.format] || state.format);
-    }
-
-    // Tono
-    const toneMap = {
-      formal: 'Usá un tono formal y profesional.',
-      neutro: 'Usá un tono neutro y objetivo.',
-      simple: 'Usá un lenguaje simple y accesible para cualquier público.',
-      tecnico: 'Usá terminología técnica apropiada para especialistas.',
-      amigable: 'Usá un tono amigable y cercano.'
-    };
-
-    if (state.tone && toneMap[state.tone]) {
-      lines.push(``);
-      lines.push(`TONO:`);
-      lines.push(toneMap[state.tone]);
     }
 
     // Restricciones
@@ -849,6 +919,11 @@
       lines.push(`RESTRICCIONES:`);
       allRestrictions.forEach(r => lines.push(`- ${r}`));
     }
+
+    // Verificación final
+    lines.push(``);
+    lines.push(`VERIFICACIÓN FINAL:`);
+    lines.push(`Antes de responder, confirmá que: (1) la respuesta cumple con el objetivo planteado en la tarea, (2) el formato de salida es exactamente el que se solicitó, (3) no hay contradicciones internas ni afirmaciones sin sustento.`);
 
     const promptText = lines.join('\n');
     document.getElementById('prompt-result').textContent = promptText;
