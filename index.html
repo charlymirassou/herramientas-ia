@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carlos Mirassou · Derecho & IA</title>
-  <meta name="description" content="Abogado, funcionario judicial y especialista en IA aplicada al derecho. Herramientas gratuitas para operadores jurídicos." />
+  <title>Carlos Mirassou Canseco · Derecho & IA</title>
+  <meta name="description" content="Abogado, funcionario judicial, docente universitario y especialista en IA aplicada al derecho. Herramientas gratuitas para operadores jurídicos." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,17 +40,18 @@
     }
 
     .hero-avatar {
-      width: 100px; height: 100px;
-      border: 3px solid rgba(255,255,255,0.35);
+      width: 160px; height: 160px;
+      border: 4px solid rgba(255,255,255,0.35);
       border-radius: 50%;
       margin: 0 auto 24px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.35);
     }
 
     .hero-avatar img {
       width: 100%; height: 100%;
       object-fit: cover;
+      object-position: center top;
       display: block;
     }
 
@@ -191,6 +192,46 @@
     .badge-judicial { background: var(--gold-light); color: var(--gold); border: 1px solid #e6d07a; }
     .badge-general { background: var(--accent-light); color: var(--accent-mid); border: 1px solid #bfdbfe; }
 
+    /* Carriles */
+    .track-tabs {
+      display: flex; gap: 0;
+      border: 2px solid var(--border);
+      border-radius: 10px; overflow: hidden;
+      margin-bottom: 36px;
+      max-width: 480px;
+    }
+    .track-tab {
+      flex: 1; padding: 13px 20px;
+      font-size: .9rem; font-weight: 700;
+      cursor: pointer; border: none;
+      background: var(--surface); color: var(--muted);
+      transition: all .15s; text-align: center;
+    }
+    .track-tab.active { background: var(--accent); color: #fff; }
+    .track-tab:first-child { border-right: 2px solid var(--border); }
+
+    .track-panel { display: none; }
+    .track-panel.active { display: block; }
+
+    .track-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .82rem; font-weight: 700;
+      color: var(--muted); margin-bottom: 20px;
+      background: var(--bg); border: 1px solid var(--border);
+      padding: 6px 16px; border-radius: 20px;
+    }
+
+    .coming-soon-card {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .coming-soon-card .cs-icon { font-size: 2rem; margin-bottom: 12px; }
+    .coming-soon-card h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+    .coming-soon-card p { font-size: .85rem; line-height: 1.6; }
+
     .tool-card h3 { font-size: 1.1rem; font-weight: 800; color: var(--accent); margin-bottom: 8px; }
     .tool-card p { font-size: .87rem; color: var(--muted); line-height: 1.6; flex: 1; margin-bottom: 20px; }
 
@@ -277,11 +318,11 @@
 <!-- HERO -->
 <div class="hero">
   <div class="hero-avatar">
-    <img src="WhatsApp Image 2026-06-07 at 11.13.45.jpeg" alt="Carlos Mirassou" />
+    <img src="WhatsApp%20Image%202026-06-07%20at%2011.13.45.jpeg" alt="Carlos Mirassou" />
   </div>
   <div class="hero-badge">Derecho · Tecnología · Inteligencia Artificial</div>
-  <h1>Carlos <span>Mirassou</span></h1>
-  <p class="tagline">Abogado, funcionario judicial y especialista en IA aplicada al derecho. Construyo herramientas prácticas para operadores jurídicos.</p>
+  <h1>Carlos <span>Mirassou Canseco</span></h1>
+  <p class="tagline">Abogado, funcionario judicial, docente universitario y especialista en IA aplicada al derecho. Construyo herramientas prácticas para operadores jurídicos.</p>
   <div class="hero-pills">
     <span class="hero-pill">⚖️ Poder Judicial</span>
     <span class="hero-pill">🤖 Inteligencia Artificial</span>
@@ -309,9 +350,9 @@
       <p>Formación y práctica en el uso de modelos de lenguaje aplicados al análisis jurídico, redacción y gestión del conocimiento legal.</p>
     </div>
     <div class="about-card">
-      <div class="icon">🎤</div>
-      <h3>Formador</h3>
-      <p>Charlas y capacitaciones para equipos judiciales sobre el uso responsable de la inteligencia artificial en el ámbito del derecho.</p>
+      <div class="icon">🎓</div>
+      <h3>Docente y formador</h3>
+      <p>Docente universitario y capacitador de equipos judiciales en el uso responsable de la inteligencia artificial aplicada al derecho.</p>
     </div>
   </div>
 </div>
@@ -323,44 +364,61 @@
   <div class="section" id="herramientas">
     <div class="section-label">Herramientas</div>
     <h2 class="section-title">Recursos gratuitos para<br>trabajar con IA</h2>
-    <p class="section-desc">Herramientas diseñadas para ayudarte a construir prompts efectivos. Funcionan 100% en tu navegador: ningún dato sale de tu computadora.</p>
+    <p class="section-desc">Elegí tu nivel de experiencia y accedé a las herramientas que mejor se adaptan a vos.</p>
 
-    <div class="tools-grid">
+    <!-- TABS -->
+    <div class="track-tabs">
+      <button class="track-tab active" onclick="switchTrack('basico', this)">🟢 Sin experiencia previa</button>
+      <button class="track-tab" onclick="switchTrack('avanzado', this)">🔵 Con experiencia en IA</button>
+    </div>
 
-      <!-- JUDICIAL -->
-      <div class="tool-card">
-        <div class="tool-card-icon">⚖️</div>
-        <span class="tool-card-badge badge-judicial">Uso Judicial</span>
-        <h3>Prompteador Judicial</h3>
-        <p>Generá prompts profesionales adaptados a tu rol, tu especialidad y tu tarea concreta dentro del Poder Judicial.</p>
-        <ul class="tool-features">
-          <li>Perfil de operador jurídico (juez, fiscal, defensor, letrado)</li>
-          <li>Especialidad por área del derecho</li>
-          <li>Casos de uso: sentencias, expedientes, jurisprudencia, escritos</li>
-          <li>Metodología de análisis paso a paso</li>
-          <li>Optimizado para ChatGPT, Gemini, Claude y NotebookLM</li>
-        </ul>
-        <div class="tool-privacy">🔒 100% local · Ningún dato sale de tu navegador</div>
-        <a href="prompteador-judicial.html" class="tool-btn">Abrir herramienta →</a>
+    <!-- PANEL BÁSICO -->
+    <div class="track-panel active" id="track-basico">
+      <div class="track-label">🟢 Herramientas guiadas · Sin configuración · 100% local</div>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-card-icon">⚖️</div>
+          <span class="tool-card-badge badge-judicial">Uso Judicial</span>
+          <h3>Prompteador Judicial</h3>
+          <p>Generá prompts profesionales adaptados a tu rol, tu especialidad y tu tarea concreta dentro del Poder Judicial.</p>
+          <ul class="tool-features">
+            <li>Perfil de operador jurídico (juez, fiscal, defensor, letrado)</li>
+            <li>Especialidad por área del derecho</li>
+            <li>Casos de uso: sentencias, expedientes, jurisprudencia, escritos</li>
+            <li>Metodología de análisis paso a paso</li>
+            <li>Optimizado para ChatGPT, Gemini, Claude y NotebookLM</li>
+          </ul>
+          <div class="tool-privacy">🔒 100% local · Ningún dato sale de tu navegador</div>
+          <a href="prompteador-judicial.html" class="tool-btn">Abrir herramienta →</a>
+        </div>
+        <div class="tool-card">
+          <div class="tool-card-icon">🛠️</div>
+          <span class="tool-card-badge badge-general">Uso General</span>
+          <h3>Prompteador General</h3>
+          <p>Armá prompts efectivos para cualquier tarea: redacción, análisis, resúmenes, generación de ideas y más.</p>
+          <ul class="tool-features">
+            <li>Selección de objetivo y rol del asistente</li>
+            <li>Descripción libre de la tarea</li>
+            <li>Formato de salida configurable</li>
+            <li>Restricciones y ajustes de tono</li>
+            <li>Optimizado para ChatGPT, Gemini, Claude y NotebookLM</li>
+          </ul>
+          <div class="tool-privacy">🔒 100% local · Ningún dato sale de tu navegador</div>
+          <a href="prompteador-general.html" class="tool-btn">Abrir herramienta →</a>
+        </div>
       </div>
+    </div>
 
-      <!-- GENERAL -->
-      <div class="tool-card">
-        <div class="tool-card-icon">🛠️</div>
-        <span class="tool-card-badge badge-general">Uso General</span>
-        <h3>Prompteador General</h3>
-        <p>Armá prompts efectivos para cualquier tarea: redacción, análisis, resúmenes, generación de ideas y más.</p>
-        <ul class="tool-features">
-          <li>Selección de objetivo y rol del asistente</li>
-          <li>Descripción libre de la tarea</li>
-          <li>Formato de salida configurable</li>
-          <li>Restricciones y ajustes de tono</li>
-          <li>Optimizado para ChatGPT, Gemini, Claude y NotebookLM</li>
-        </ul>
-        <div class="tool-privacy">🔒 100% local · Ningún dato sale de tu navegador</div>
-        <a href="prompteador-general.html" class="tool-btn">Abrir herramienta →</a>
+    <!-- PANEL AVANZADO -->
+    <div class="track-panel" id="track-avanzado">
+      <div class="track-label">🔵 Herramientas con integración de API · Requieren configuración técnica</div>
+      <div class="tools-grid">
+        <div class="coming-soon-card">
+          <div class="cs-icon">🔌</div>
+          <h3>Herramientas con API · Próximamente</h3>
+          <p>Herramientas que se conectan directamente a la API de Claude, OpenAI o Gemini para procesar texto dentro de la misma página. Requerirán una API key propia.</p>
+        </div>
       </div>
-
     </div>
 
     <!-- CONTACTO -->
@@ -378,5 +436,13 @@
   © 2026 Carlos Mirassou · Derecho & IA · <a href="https://github.com/charlymirassou" style="color:#aaa;">GitHub</a>
 </footer>
 
+<script>
+  function switchTrack(track, btn) {
+    document.querySelectorAll('.track-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('track-' + track).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
 </body>
 </html>
