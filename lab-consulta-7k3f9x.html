@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Seis decisiones · Laboratorio de innovación judicial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pizarra:#161B22; --pizarra-alta:#1D242E;
+  --papel:#E9E5DA; --papel-tenue:#9AA3AE;
+  --laton:#C9A227; --acero:#7D93A6; --alerta:#A64B42;
+  --linea:rgba(233,229,218,.14);
+  --serif:"Newsreader",Georgia,serif;
+  --sans:"IBM Plex Sans",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--pizarra);color:var(--papel);font-family:var(--sans);font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh}
+.candado{max-width:420px;margin:0 auto;padding:18vh 24px 0}
+.candado h2{font-size:clamp(1.4rem,4vw,1.9rem);max-width:none;margin-bottom:.8rem}
+.candado p{font-size:.9rem;color:var(--papel-tenue);margin-bottom:1.6rem}
+.candado input{
+  width:100%;background:var(--pizarra-alta);color:var(--papel);
+  border:1px solid var(--linea);padding:.75rem .9rem;
+  font-family:var(--sans);font-size:1rem;font-weight:300;
+}
+.candado input:focus{outline:none;border-color:var(--laton)}
+.candado .error{color:var(--alerta);font-size:.86rem;margin-top:.8rem;min-height:1.2em;margin-bottom:0}
+#envase{display:none}
+
+.envase{max-width:1040px;margin:0 auto;padding:clamp(26px,5vw,64px) clamp(18px,5vw,56px) 80px}
+
+h1{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.02em;max-width:18ch}
+h2{font-family:var(--serif);font-weight:300;font-size:clamp(1.5rem,3.4vw,2.4rem);line-height:1.15;letter-spacing:-.015em;max-width:22ch}
+h3{font-size:.9rem;font-weight:500;color:var(--laton);margin-bottom:.5rem}
+p{font-size:1rem;line-height:1.62;max-width:66ch}
+.tenue{color:var(--papel-tenue)}
+.hilo{width:52px;height:2px;background:var(--laton);margin:1.4rem 0}
+
+.marco{display:inline-block;border:1px solid var(--laton);color:var(--laton);padding:.35rem .7rem;font-size:.76rem;letter-spacing:.05em;margin-bottom:1.4rem}
+.destinatario{margin-top:2rem;font-size:.9rem;color:var(--papel-tenue);line-height:1.7;border-left:2px solid var(--linea);padding-left:1rem;max-width:58ch}
+.aviso{margin-top:1.1rem;border-left:2px solid var(--alerta);padding-left:1rem;max-width:58ch}
+.aviso p{font-size:.85rem;color:var(--papel-tenue)}
+
+.escena{display:none}
+.escena.viva{display:block;animation:entra .35s cubic-bezier(.2,.7,.3,1) both}
+@keyframes entra{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+.migas{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:1.8rem;font-size:.72rem}
+.miga{border:1px solid var(--linea);padding:.28rem .55rem;color:var(--papel-tenue)}
+.miga.hecha{border-color:var(--laton);color:var(--laton)}
+.miga.actual{border-color:var(--papel);color:var(--papel)}
+
+.pregunta-num{font-family:var(--serif);font-size:1rem;color:var(--acero);margin-bottom:.6rem;display:block}
+
+.opciones{margin-top:1.9rem;display:grid;gap:1px;background:var(--linea);border:1px solid var(--linea)}
+.opcion{background:var(--pizarra);border:none;text-align:left;width:100%;padding:1.15rem 1.3rem;cursor:pointer;color:var(--papel);font-family:var(--sans);display:block;transition:background .16s}
+.opcion:hover{background:var(--pizarra-alta)}
+.opcion:focus-visible{outline:2px solid var(--laton);outline-offset:-2px}
+.opcion .titulo{font-size:1.05rem;font-weight:500;display:block}
+.opcion .quien{font-size:.8rem;color:var(--laton);display:block;margin-top:.3rem}
+.opcion .quien.sin{color:var(--alerta)}
+
+.consecuencia{margin-top:1.9rem;border-left:2px solid var(--laton);padding:.3rem 0 .3rem 1.2rem;max-width:70ch}
+.consecuencia p{font-size:.95rem;color:var(--papel-tenue)}
+
+.anotacion{margin-top:1.7rem;max-width:70ch}
+.anotacion label{display:block;font-size:.84rem;color:var(--acero);margin-bottom:.5rem}
+textarea{
+  width:100%;background:var(--pizarra-alta);color:var(--papel);
+  border:1px solid var(--linea);padding:.8rem .95rem;
+  font-family:var(--sans);font-size:.95rem;font-weight:300;line-height:1.55;
+  resize:vertical;min-height:84px;
+}
+textarea:focus{outline:none;border-color:var(--laton)}
+textarea::placeholder{color:var(--papel-tenue);opacity:.55}
+
+.ficha{border:1px solid var(--linea);margin-top:1.9rem}
+.ficha-fila{display:grid;grid-template-columns:minmax(130px,1fr) 2.4fr;border-bottom:1px solid var(--linea)}
+.ficha-fila:last-child{border-bottom:none}
+.ficha-fila dt{padding:.85rem 1rem;font-size:.82rem;color:var(--laton);border-right:1px solid var(--linea)}
+.ficha-fila dd{padding:.85rem 1rem;font-size:.92rem;line-height:1.5}
+.nota-ficha{font-size:.85rem;color:var(--acero);margin-top:.5rem;border-left:2px solid var(--linea);padding-left:.7rem;font-style:italic}
+.medidor{display:flex;gap:3px;margin-top:.4rem;max-width:170px}
+.tramo{height:5px;flex:1;background:var(--linea)}
+.tramo.on{background:var(--laton)}
+.tramo.on.rojo{background:var(--alerta)}
+
+.veredicto{margin-top:2.2rem;border-top:1px solid var(--linea);padding-top:1.7rem}
+.veredicto p{margin-bottom:1rem}
+.sin-evidencia{border-left:2px solid var(--alerta);padding-left:1rem;margin-top:1.3rem;max-width:66ch}
+.sin-evidencia p{font-size:.9rem;color:var(--papel-tenue)}
+
+.timon{display:flex;gap:.55rem;margin-top:2.2rem;flex-wrap:wrap}
+button.mando{font-family:var(--sans);font-size:.86rem;background:transparent;color:var(--papel);border:1px solid var(--linea);padding:.55rem 1.05rem;cursor:pointer;transition:border-color .18s,color .18s}
+button.mando:hover{border-color:var(--laton);color:var(--laton)}
+button.mando:focus-visible{outline:2px solid var(--laton);outline-offset:2px}
+button.mando.primaria{border-color:var(--laton);color:var(--laton)}
+.acuse{font-size:.84rem;color:var(--laton);margin-top:.8rem;min-height:1.2em}
+
+@media (max-width:640px){.ficha-fila{grid-template-columns:1fr}.ficha-fila dt{border-right:none;border-bottom:1px solid var(--linea);padding-bottom:.4rem}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  body{background:#fff;color:#111}
+  .envase{padding:0}
+  .opciones,.timon,.migas,.aviso,.acuse{display:none}
+  textarea{background:#fff;color:#111;border-color:#ccc}
+  .ficha,.ficha-fila,.ficha-fila dt{border-color:#ccc}
+  .ficha-fila dt{color:#7a6410}
+  h1,h2{color:#111}
+  p,.tenue,.consecuencia p,.sin-evidencia p,.nota-ficha{color:#333}
+}
+</style>
+</head>
+<body>
+
+<div class="candado" id="candado">
+  <h2>Documento reservado</h2>
+  <p>Ingrese la clave que recibió junto con el enlace.</p>
+  <input type="password" id="clave" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Clave">
+  <div class="timon"><button class="mando primaria" id="btn-entrar">Entrar</button></div>
+  <p class="error" id="error"></p>
+</div>
+
+<div class="envase" id="envase">
+
+  <section class="escena viva" id="portada">
+    <span class="marco">Documento de trabajo · Secretaría Letrada de Presidencia</span>
+    <h1>Seis decisiones antes de crear el laboratorio</h1>
+    <div class="hilo"></div>
+    <p class="tenue">No es un proyecto cerrado. Son las seis definiciones que hay que tomar. Después de cada respuesta aparece lo que produjo ese camino en las provincias que ya lo recorrieron, y un espacio para anotar observaciones.</p>
+    <div class="destinatario">Seis preguntas, unos cinco minutos. Cualquier decisión puede rehacerse al final.</div>
+    <div class="aviso"><p>Las observaciones que escriba quedan solo en esta pantalla. Si cierra la página sin enviarlas, se pierden.</p></div>
+    <div class="timon"><button class="mando primaria" id="btn-empezar">Empezar</button></div>
+  </section>
+
+  <section class="escena" id="paso">
+    <div class="migas" id="migas"></div>
+    <span class="pregunta-num" id="num"></span>
+    <h2 id="titulo"></h2>
+    <p class="tenue" id="bajada" style="margin-top:.9rem"></p>
+    <div class="opciones" id="opciones"></div>
+    <div class="anotacion" id="libre" style="display:none">
+      <label for="txt-libre" id="lbl-libre"></label>
+      <textarea id="txt-libre" style="min-height:64px"></textarea>
+    </div>
+    <div class="consecuencia" id="consecuencia" style="display:none"></div>
+    <div class="anotacion" id="anotacion" style="display:none">
+      <label for="nota">Observaciones sobre esta decisión</label>
+      <textarea id="nota" placeholder="Opcional. Lo que anote acá viaja con la síntesis final."></textarea>
+    </div>
+    <div class="timon" id="timon-paso"></div>
+  </section>
+
+  <section class="escena" id="sintesis">
+    <span class="marco">Resultado</span>
+    <h2 id="sintesis-titulo"></h2>
+    <dl class="ficha" id="ficha"></dl>
+    <div class="veredicto" id="veredicto"></div>
+    <div class="anotacion" style="margin-top:2.2rem">
+      <label for="cierre">Comentario final</label>
+      <textarea id="cierre" style="min-height:130px" placeholder="Definiciones, reparos, temas a conversar, próximos pasos."></textarea>
+    </div>
+    <div class="timon">
+      <button class="mando primaria" id="btn-whatsapp">Enviar por WhatsApp</button>
+      <button class="mando" id="btn-copiar">Copiar el texto</button>
+      <button class="mando" id="btn-imprimir">Imprimir</button>
+      <button class="mando" id="btn-rehacer">Rehacer</button>
+    </div>
+    <p class="acuse" id="acuse"></p>
+  </section>
+
+</div>
+
+<script>
+/* ---------------------------------------------------------------
+   CLAVE DE ACCESO
+   Para cambiarla, edite la línea de abajo y vuelva a subir el archivo.
+   Use una palabra descartable: no una contraseña personal, porque
+   queda escrita en el código de la página.
+   --------------------------------------------------------------- */
+var CLAVE = "laboratorio2026";
+
+(function(){
+  var caja = document.getElementById('candado');
+  var campo = document.getElementById('clave');
+  var error = document.getElementById('error');
+
+  function probar(){
+    if(campo.value.trim().toLowerCase() === CLAVE.toLowerCase()){
+      caja.style.display = 'none';
+      document.getElementById('envase').style.display = 'block';
+    } else {
+      error.textContent = 'La clave no es correcta.';
+      campo.value = '';
+      campo.focus();
+    }
+  }
+
+  document.getElementById('btn-entrar').addEventListener('click', probar);
+  campo.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ probar(); } });
+  campo.focus();
+})();
+</script>
+
+<script>
+(function(){
+
+var PASOS = [
+  {
+    clave:'ubicacion', rotulo:'Dependencia',
+    titulo:'¿De quién depende?',
+    bajada:'Define quién responde por los resultados.',
+    opciones:[
+      {id:'ministro', titulo:'Un ministro de la Corte', quien:'Mendoza, Chaco, Jujuy', peso:1, evidencia:3,
+       consecuencia:'Es el arreglo más liviano y el más probado del país: alguien decide todas las semanas, sin esperar un acuerdo. El costo es que depende de la agenda de esa persona, y si cambia de foco el laboratorio se apaga sin que nadie lo cierre formalmente.'},
+      {id:'planificacion', titulo:'Bajo la órbita de una futura Secretaría de Planificación', quien:'La Pampa, Córdoba', peso:2, evidencia:2,
+       consecuencia:'Ubica la innovación junto a la estadística, que es lo que hace falta para medir. Tiene dos condiciones: que la Secretaría efectivamente se cree, y que la innovación no quede compitiendo por atención con las urgencias operativas, porque en esa disputa las urgencias siempre ganan.'},
+      {id:'cuerpo', titulo:'Dependencia directa del Cuerpo, con dirección propia y cargos', quien:'Consejo de la Magistratura y TSJ de CABA', peso:4, evidencia:1,
+       consecuencia:'Es el diseño con mayor independencia y mayor peso institucional: no queda atado a la agenda de ningún ministro ni de ninguna secretaría. Lo que hay que resolver es la velocidad. Un cuerpo colegiado decide en acuerdo, y un laboratorio necesita decidir seguido y en chico. Conviene definir desde la norma qué se resuelve en plenario y qué no.'},
+      {id:'cuerpo_delega', titulo:'El Cuerpo lo crea y delega la conducción en un ministro', quien:'Sin precedente exacto en el país', sin:true, peso:3, evidencia:1,
+       consecuencia:'Separa el mandato de la ejecución: el Cuerpo fija el norte y le da respaldo institucional, un ministro conduce el día a día. Es la misma lógica con la que la Corte viene resolviendo otros rediseños. No hay experiencia argentina que permita anticipar cómo funciona, pero resuelve sobre el papel la tensión entre independencia y velocidad.'}
+    ]
+  },
+  {
+    clave:'dotacion', rotulo:'Integrantes',
+    titulo:'¿Quién lo integra?',
+    bajada:'La decisión que más discusión genera.',
+    opciones:[
+      {id:'comision', titulo:'Gente que ya está, en comisión de servicio', quien:'Mendoza, Chaco', peso:1, evidencia:3,
+       consecuencia:'No suma planta y permite arrancar rápido. El costo oculto: gente con doble tarea rinde al ritmo de su tarea principal, y los proyectos avanzan más lento que el cronograma.'},
+      {id:'convocatoria', titulo:'Nadie fijo: se convoca por proyecto', quien:'Mendoza', peso:0, evidencia:2,
+       consecuencia:'Es lo más barato y lo que más participación genera: Mendoza recibió 49 proyectos. También explica por qué a agosto de 2025 ninguno estaba implementado. Sin equipo estable, la implementación queda en manos de gente que además tiene que atender su juzgado.'},
+      {id:'mixta', titulo:'Dos o tres personas full time, más referentes', quien:'Sin precedente exacto en el país', sin:true, peso:2, evidencia:0,
+       consecuencia:'Resuelve el problema de la doble tarea sin crear una estructura pesada. No hay experiencia argentina que permita decir si funciona: es una hipótesis razonable, no un modelo probado.'},
+      {id:'planta', titulo:'Planta completa con presupuesto propio', quien:'CABA', peso:4, evidencia:1,
+       consecuencia:'Es lo que permite comprometer resultados en serio, porque hay gente que responde por ellos a tiempo completo. También hace más costoso el error: si el laboratorio no produce, quedan cargos ocupados haciendo otra cosa.'}
+    ]
+  },
+  {
+    clave:'alcance', rotulo:'Alcance',
+    titulo:'¿De qué se ocupa?',
+    bajada:'Cinco provincias eligieron lo mismo.',
+    campoLibre:'Si el alcance es otro, escríbalo acá',
+    opciones:[
+      {id:'ia', titulo:'Inteligencia artificial', quien:'Mendoza, Jujuy, Chaco, San Juan, La Pampa', peso:1, evidencia:2,
+       consecuencia:'Es el patrón nacional: en las cinco provincias el primer y casi único producto fue un protocolo o guía de uso de IA generativa, sin servicios implementados con impacto medido. Santa Fe además ya tiene esto resuelto por las Circulares 19 y 25 de 2025, así que habría que definir qué agrega el laboratorio sobre lo que ya existe.'},
+      {id:'procesos', titulo:'Trámites, procesos y demoras', quien:'Sin precedente claro en el país', sin:true, peso:2, evidencia:1,
+       consecuencia:'Es donde están los problemas que el ciudadano percibe y donde PROMETEA obtuvo sus resultados. Ninguna provincia lo eligió como eje declarado, así que no hay a quién copiarle el método: habría que construirlo.'},
+      {id:'acceso', titulo:'Acceso a justicia y atención al ciudadano', quien:'Proyecto «Dialogando», con Santa Fe adentro', peso:2, evidencia:2,
+       consecuencia:'Es lo más comunicable hacia afuera y donde Santa Fe ya tiene experiencia propia premiada a nivel nacional, en Sunchales y Rosario. En contra: es el terreno donde los resultados tardan más en volverse números, y un área nueva necesita mostrar algo antes de que se agote la paciencia.'},
+      {id:'todo', titulo:'Todo, incluido el trabajo de los tribunales', quien:'Ninguna jurisdicción lo hace', sin:true, peso:3, evidencia:0,
+       consecuencia:'Es el alcance más ambicioso y el que más resistencia genera, porque toca la forma de trabajar de jueces y secretarios. Ninguna provincia lo intentó desde un laboratorio. Con un área recién creada y sin resultados previos, es una pelea difícil de ganar en el primer año.'}
+    ]
+  },
+  {
+    clave:'agenda', rotulo:'Agenda',
+    titulo:'¿Quién decide en qué trabaja?',
+    bajada:'Determina quién manda en la práctica.',
+    opciones:[
+      {id:'corte', titulo:'La Corte', quien:'Es lo habitual en las estructuras existentes', peso:1, evidencia:2,
+       consecuencia:'Asegura alineamiento con las prioridades institucionales y respaldo político para los cambios. El riesgo es que la agenda se llene de temas que ya venían empujados desde arriba y que el laboratorio termine ejecutando decisiones tomadas en otro lado.'},
+      {id:'juzgados', titulo:'A pedido de los juzgados', quien:'Sin precedente formalizado', sin:true, peso:1, evidencia:0,
+       consecuencia:'Genera adopción genuina, porque el laboratorio interviene donde lo llaman y no donde nadie lo pidió. El problema conocido de este esquema es que la demanda se concentra en las oficinas mejor organizadas, que son las que menos lo necesitan.'},
+      {id:'equipo', titulo:'El propio equipo sale a buscar, guiado por las estadísticas de demora y volumen', quien:'PROMETEA, MPF de la Ciudad', peso:2, evidencia:3,
+       consecuencia:'Es el método que produjo los únicos resultados auditados del país, y le da al equipo una respuesta defendible cuando un juez pregunte por qué fueron a su juzgado. Exige una condición que en Santa Fe hay que verificar: estadística confiable desagregada por trámite. Sin eso, la elección vuelve a ser discrecional con lenguaje técnico.'}
+    ]
+  },
+  {
+    clave:'metrica', rotulo:'Medición',
+    titulo:'¿Cómo se mide?',
+    bajada:'Define hacia dónde tira el área con el tiempo.',
+    opciones:[
+      {id:'actividad', titulo:'Por actividad', quien:'Es lo que hacen todas las jurisdicciones hoy', peso:1, evidencia:1,
+       consecuencia:'Proyectos, capacitaciones, convenios. Es fácil de reportar y siempre muestra números en alza. También es el motivo por el que hoy no se puede saber si algún laboratorio argentino mejoró el servicio de justicia: nadie midió eso.'},
+      {id:'uso', titulo:'Por uso', quien:'Sin precedente en el país', sin:true, peso:1, evidencia:0,
+       consecuencia:'Cuántas oficinas siguen usando lo que se entregó, seis meses después. Distingue lo entregado de lo adoptado, que es donde mueren la mayoría de los proyectos de modernización. Más exigente que medir actividad y más fácil de sostener que medir impacto, porque no requiere línea de base previa.'},
+      {id:'simplificacion', titulo:'Por simplificación', quien:'Sin precedente en el país', sin:true, peso:2, evidencia:1,
+       consecuencia:'Pasos y días eliminados. Alinea al laboratorio con el servicio y no con su propio crecimiento. Exige algo que casi nadie hace: medir la línea de base antes de intervenir. Sin ese trabajo previo, la métrica queda declarativa.'},
+      {id:'mixta', titulo:'Mixta, con peso en la simplificación', quien:'Sin precedente en el país', sin:true, peso:2, evidencia:1,
+       consecuencia:'Se reporta actividad, pero la continuidad depende de los indicadores de simplificación. Es lo más realista para una etapa inicial. El riesgo conocido de los esquemas mixtos es que con el tiempo se reporta lo fácil y se abandona lo difícil.'}
+    ]
+  },
+  {
+    clave:'plazo', rotulo:'Plazo',
+    titulo:'¿Por cuánto tiempo se crea?',
+    bajada:'De todas las normas del país, solo una previó revisarse.',
+    opciones:[
+      {id:'indefinido', titulo:'Indefinido', quien:'Mendoza, Chaco, San Juan, La Pampa', peso:3, evidencia:2,
+       consecuencia:'Da estabilidad y evita la sensación de provisoriedad ante el resto del Poder Judicial. También significa que si no produce, no hay ningún mecanismo previsto para advertirlo ni para corregir el rumbo.'},
+      {id:'revision', titulo:'Indefinido, con evaluación cada dos años', quien:'Jujuy', peso:2, evidencia:2,
+       consecuencia:'Combina estabilidad con control, y es la única salvaguarda encontrada en todo el relevamiento nacional. Como la evaluación es interna, su valor depende de qué tan exigente sea el propio laboratorio consigo mismo.'},
+      {id:'etapas', titulo:'En dos etapas: precario primero, formal después', quien:'Sin precedente en laboratorios, pero sí en Santa Fe', peso:1, evidencia:1,
+       consecuencia:'Es el método que la Corte ya viene aplicando en otros rediseños institucionales, lo que facilita explicarlo puertas adentro, y permite corregir antes de consolidar. En contra: los esquemas precarios tienden a durar más de lo previsto, y la etapa dos llega cuando ya nadie discute la etapa uno.'},
+      {id:'dos_anios', titulo:'Dos años, renovable con resultados', quien:'Sin precedente en el país', sin:true, peso:1, evidencia:0,
+       consecuencia:'Es la señal más fuerte que la Corte puede dar de que no está creando estructura por inercia, y obliga a producir algo mostrable en el primer año. En contra: dificulta conseguir gente buena, porque nadie deja su cargo por un destino que puede no existir en dos años.'}
+    ]
+  }
+];
+
+var elegido = {}, notas = {}, libres = {}, paso = 0;
+function $(id){ return document.getElementById(id); }
+var escenas = { portada:$('portada'), paso:$('paso'), sintesis:$('sintesis') };
+
+function mostrar(cual){
+  for(var k in escenas){ escenas[k].classList.remove('viva'); }
+  escenas[cual].classList.add('viva');
+  window.scrollTo(0,0);
+}
+
+function guardarCampos(){
+  var p = PASOS[paso];
+  if(!p) return;
+  if($('anotacion').style.display !== 'none'){
+    var t = $('nota').value.trim();
+    if(t){ notas[p.clave] = t; } else { delete notas[p.clave]; }
+  }
+  if(p.campoLibre){
+    var l = $('txt-libre').value.trim();
+    if(l){ libres[p.clave] = l; } else { delete libres[p.clave]; }
+  }
+}
+
+function pintarMigas(){
+  var caja = $('migas'); caja.innerHTML = '';
+  PASOS.forEach(function(p, n){
+    var m = document.createElement('span');
+    m.className = 'miga' + (elegido[p.clave] ? ' hecha' : '') + (n === paso ? ' actual' : '');
+    m.textContent = p.rotulo;
+    caja.appendChild(m);
+  });
+}
+
+function pintarPaso(){
+  var p = PASOS[paso];
+  pintarMigas();
+  $('num').textContent = 'Decisión ' + (paso + 1) + ' de ' + PASOS.length;
+  $('titulo').textContent = p.titulo;
+  $('bajada').textContent = p.bajada;
+  $('consecuencia').style.display = 'none';
+  $('anotacion').style.display = 'none';
+  $('timon-paso').innerHTML = '';
+
+  if(p.campoLibre){
+    $('libre').style.display = 'block';
+    $('lbl-libre').textContent = p.campoLibre;
+    $('txt-libre').value = libres[p.clave] || '';
+  } else {
+    $('libre').style.display = 'none';
+  }
+
+  var caja = $('opciones'); caja.innerHTML = ''; caja.style.display = 'grid';
+  p.opciones.forEach(function(o){
+    var b = document.createElement('button');
+    b.className = 'opcion';
+    b.innerHTML = '<span class="titulo"></span><span class="quien' + (o.sin ? ' sin' : '') + '"></span>';
+    b.querySelector('.titulo').textContent = o.titulo;
+    b.querySelector('.quien').textContent = o.quien;
+    b.addEventListener('click', function(){ elegir(o); });
+    caja.appendChild(b);
+  });
+  mostrar('paso');
+}
+
+function elegir(o){
+  var p = PASOS[paso];
+  elegido[p.clave] = o;
+  $('opciones').style.display = 'none';
+
+  var c = $('consecuencia');
+  c.innerHTML = '<h3></h3><p></p>';
+  c.querySelector('h3').textContent = o.titulo;
+  c.querySelector('p').textContent = o.consecuencia;
+  c.style.display = 'block';
+
+  $('anotacion').style.display = 'block';
+  $('nota').value = notas[p.clave] || '';
+  pintarMigas();
+
+  var t = $('timon-paso'); t.innerHTML = '';
+  var seguir = document.createElement('button');
+  seguir.className = 'mando primaria';
+  seguir.textContent = (paso === PASOS.length - 1) ? 'Ver la síntesis' : 'Siguiente';
+  seguir.addEventListener('click', function(){
+    guardarCampos();
+    if(paso === PASOS.length - 1){ pintarSintesis(); } else { paso++; pintarPaso(); }
+  });
+  t.appendChild(seguir);
+
+  var volver = document.createElement('button');
+  volver.className = 'mando';
+  volver.textContent = 'Elegir otra';
+  volver.addEventListener('click', function(){ guardarCampos(); pintarPaso(); });
+  t.appendChild(volver);
+
+  if(paso > 0){
+    var atras = document.createElement('button');
+    atras.className = 'mando';
+    atras.textContent = 'Anterior';
+    atras.addEventListener('click', function(){ guardarCampos(); paso--; pintarPaso(); });
+    t.appendChild(atras);
+  }
+}
+
+function calcular(){
+  var peso = 0, evid = 0, sin = [];
+  PASOS.forEach(function(p){
+    var o = elegido[p.clave];
+    peso += o.peso; evid += o.evidencia;
+    if(o.sin){ sin.push(p.rotulo.toLowerCase()); }
+  });
+  return {peso:peso, evid:evid, sin:sin};
+}
+
+function textosVeredicto(m){
+  var t = [];
+  if(m.peso <= 6){
+    t.push('El diseño elegido puede ponerse en marcha sin crear cargos ni modificar el presupuesto, lo que lo vuelve una decisión reversible. A cambio, su capacidad de ejecución depende de personas con doble tarea: conviene que el compromiso de resultados del primer año sea modesto y verificable, no ambicioso.');
+  } else if(m.peso <= 12){
+    t.push('El diseño combina estructura suficiente para sostener proyectos con un costo todavía acotado. Es el punto donde más importa definir por escrito qué no hace el laboratorio, porque a esta escala la tentación de asignarle trabajo operativo es alta y es así como estas áreas pierden su función.');
+  } else {
+    t.push('El diseño implica cargos, presupuesto y permanencia. Es el que mejor sostiene una agenda de largo plazo y el más difícil de revertir. Ninguna de las experiencias argentinas de esta escala publicó evaluaciones que permitan saber si el peso estructural se tradujo en mejores resultados.');
+  }
+
+  if(m.evid >= 11){
+    t.push('Casi todas las opciones tienen precedente en otras provincias. Eso facilita defender la propuesta ante el Cuerpo y permite pedir los antecedentes a quienes ya lo hicieron. También significa que el resultado esperable es parecido al de ellos: hasta hoy, producción normativa y de capacitación, sin servicios implementados con impacto medido.');
+  } else if(m.evid >= 6){
+    t.push('El diseño mezcla decisiones ya probadas con otras sin antecedente nacional. Es una posición defendible, siempre que en la presentación se distinga con claridad qué se copia y qué se propone por primera vez.');
+  } else {
+    t.push('El diseño casi no tiene respaldo en experiencias previas. Puede ser la decisión correcta, pero hay que presentarla como lo que es: una apuesta fundada en el diagnóstico, no en resultados ajenos. Si se la presenta como práctica establecida, el primer chequeo la desarma.');
+  }
+
+  if(elegido.ubicacion.id === 'cuerpo'){
+    t.push('Depender del Cuerpo resuelve el problema de la independencia y abre el de la velocidad. Responder ante siete puede parecerse a no responder ante nadie: siete prioridades distintas pueden dar cero prioridad. Conviene que la norma diga qué decisiones requieren acuerdo y cuáles resuelve la dirección por sí sola.');
+  }
+  if(elegido.ubicacion.id === 'planificacion'){
+    t.push('Esta opción depende de una Secretaría que todavía no existe. Conviene definir qué pasa si su creación se demora: si el laboratorio espera, o si arranca en otra órbita y se muda después.');
+  }
+  if(elegido.metrica.id === 'actividad' && elegido.plazo.id === 'indefinido'){
+    t.push('Medir por actividad y crear sin revisión es exactamente lo que hicieron las provincias pioneras. Es la combinación más cómoda de aprobar y la que, hasta ahora, no le permitió a nadie demostrar que el laboratorio mejoró algo.');
+  }
+  if(elegido.plazo.id === 'dos_anios' && elegido.dotacion.id === 'planta'){
+    t.push('Hay una tensión práctica entre crear cargos y fijar un plazo de dos años: cuesta cubrir puestos que pueden desaparecer. Si se mantienen ambas decisiones, conviene resolver desde la norma qué pasa con esas personas si el laboratorio no se renueva.');
+  }
+  if(elegido.dotacion.id === 'convocatoria'){
+    t.push('Convocar proyectos sin un equipo estable que los acompañe es precisamente lo que dejó los 49 proyectos mendocinos sin implementar. Si se mantiene este esquema, conviene definir desde el inicio quién ejecuta lo que se selecciona.');
+  }
+  if(elegido.agenda.id === 'equipo' && elegido.metrica.id !== 'actividad'){
+    t.push('Elegir los problemas por dato y medir por resultado son decisiones coherentes entre sí, y ambas dependen de lo mismo: estadística confiable desagregada por trámite. Antes de comprometerlo en una acordada conviene confirmar qué tiene hoy el área de Estadística y qué habría que construir.');
+  }
+  if(elegido.alcance.id === 'todo' && elegido.ubicacion.id !== 'cuerpo'){
+    t.push('Un alcance sobre el trabajo de los tribunales sin dependencia directa del Cuerpo deja al laboratorio pidiendo cambios a jueces sobre los que no tiene ninguna autoridad. Conviene revisar esta combinación.');
+  }
+  if(elegido.alcance.id === 'ia'){
+    t.push('Si el alcance es la inteligencia artificial, hace falta responder qué agrega el laboratorio a lo que Santa Fe ya resolvió por circular en 2025. Sin esa respuesta, la creación del área queda difícil de justificar frente a quien pregunte.');
+  }
+  return t;
+}
+
+function pintarSintesis(){
+  var m = calcular();
+  var ficha = $('ficha'); ficha.innerHTML = '';
+
+  PASOS.forEach(function(p){
+    var o = elegido[p.clave];
+    var fila = document.createElement('div');
+    fila.className = 'ficha-fila';
+    var dt = document.createElement('dt'); dt.textContent = p.rotulo;
+    var dd = document.createElement('dd');
+    dd.textContent = o.titulo;
+    var q = document.createElement('div');
+    q.style.cssText = 'font-size:.8rem;color:var(--acero);margin-top:.25rem';
+    q.textContent = o.quien;
+    dd.appendChild(q);
+    if(libres[p.clave]){
+      var l = document.createElement('div');
+      l.className = 'nota-ficha';
+      l.textContent = 'Alcance agregado: ' + libres[p.clave];
+      dd.appendChild(l);
+    }
+    if(notas[p.clave]){
+      var n = document.createElement('div');
+      n.className = 'nota-ficha';
+      n.textContent = notas[p.clave];
+      dd.appendChild(n);
+    }
+    fila.appendChild(dt); fila.appendChild(dd);
+    ficha.appendChild(fila);
+  });
+
+  function medidor(v, max, rojo){
+    var h = '<div class="medidor">';
+    for(var i = 0; i < max; i++){ h += '<span class="tramo' + (i < v ? ' on' : '') + (rojo ? ' rojo' : '') + '"></span>'; }
+    return h + '</div>';
+  }
+
+  var fp = document.createElement('div');
+  fp.className = 'ficha-fila';
+  fp.innerHTML = '<dt>Peso estructural</dt><dd>' + (m.peso <= 6 ? 'Liviano' : m.peso <= 12 ? 'Intermedio' : 'Pesado') +
+    medidor(Math.max(1, Math.round(m.peso / 18 * 6)), 6, m.peso > 12) + '</dd>';
+  ficha.appendChild(fp);
+
+  var fe = document.createElement('div');
+  fe.className = 'ficha-fila';
+  fe.innerHTML = '<dt>Respaldo empírico</dt><dd>' + (m.evid <= 5 ? 'Sin precedentes que lo sostengan' : m.evid <= 10 ? 'Precedentes parciales' : 'Camino transitado por otras provincias') +
+    medidor(Math.max(1, Math.round(m.evid / 14 * 6)), 6, m.evid <= 5) + '</dd>';
+  ficha.appendChild(fe);
+
+  $('sintesis-titulo').textContent = m.peso <= 6 ? 'Un laboratorio liviano, con lo que eso permite y lo que no'
+    : m.peso <= 12 ? 'Un laboratorio de peso intermedio' : 'Una estructura formal, con el compromiso que implica';
+
+  var v = $('veredicto'); v.innerHTML = '';
+  textosVeredicto(m).forEach(function(x){ var p = document.createElement('p'); p.textContent = x; v.appendChild(p); });
+
+  if(m.sin.length){
+    var caja = document.createElement('div');
+    caja.className = 'sin-evidencia';
+    var pp = document.createElement('p');
+    pp.textContent = 'Decisiones sin antecedente nacional en este diseño: ' + m.sin.join(', ') + '. No hay experiencia argentina que permita anticipar cómo funcionan.';
+    caja.appendChild(pp); v.appendChild(caja);
+  }
+
+  var cierre = document.createElement('p');
+  cierre.style.cssText = 'margin-top:1.5rem;color:var(--acero);font-size:.88rem';
+  cierre.textContent = 'Relevamiento sobre doce jurisdicciones, con fuente en normativa oficial, sitios de los poderes judiciales, Justicia.ar y el informe del BID sobre PROMETEA. Quedan datos por confirmar: el texto completo de la Acordada 31420 de Mendoza, el presupuesto real de cada laboratorio y si los pilotos mendocinos se implementaron después de 2025.';
+  v.appendChild(cierre);
+
+  mostrar('sintesis');
+}
+
+function armarTexto(compacto){
+  var L = ['LABORATORIO DE INNOVACIÓN JUDICIAL — definiciones', ''];
+  PASOS.forEach(function(p){
+    var o = elegido[p.clave];
+    L.push(p.rotulo.toUpperCase() + ': ' + o.titulo);
+    if(!compacto){ L.push('  (' + o.quien + ')'); }
+    if(libres[p.clave]){ L.push('  Alcance agregado: ' + libres[p.clave]); }
+    if(notas[p.clave]){ L.push('  Obs.: ' + notas[p.clave]); }
+  });
+  var m = calcular();
+  L.push('');
+  L.push('Peso estructural: ' + (m.peso <= 6 ? 'liviano' : m.peso <= 12 ? 'intermedio' : 'pesado'));
+  L.push('Respaldo empírico: ' + (m.evid <= 5 ? 'sin precedentes' : m.evid <= 10 ? 'parcial' : 'transitado por otras provincias'));
+  if(m.sin.length){ L.push('Sin antecedente nacional: ' + m.sin.join(', ') + '.'); }
+  var c = $('cierre').value.trim();
+  if(c){ L.push('', 'COMENTARIO FINAL:', c); }
+  return L.join('\n');
+}
+
+$('btn-empezar').addEventListener('click', function(){ paso = 0; pintarPaso(); });
+$('btn-imprimir').addEventListener('click', function(){ window.print(); });
+$('btn-rehacer').addEventListener('click', function(){ elegido = {}; notas = {}; libres = {}; paso = 0; $('cierre').value = ''; pintarPaso(); });
+
+$('btn-whatsapp').addEventListener('click', function(){
+  var t = armarTexto(false);
+  if(encodeURIComponent(t).length > 5500){ t = armarTexto(true); }
+  window.open('https://wa.me/?text=' + encodeURIComponent(t), '_blank');
+});
+
+$('btn-copiar').addEventListener('click', function(){
+  var t = armarTexto(false), acuse = $('acuse');
+  function fallback(){
+    var a = document.createElement('textarea');
+    a.value = t; a.style.position = 'fixed'; a.style.opacity = '0';
+    document.body.appendChild(a); a.select();
+    try{ document.execCommand('copy'); acuse.textContent = 'Texto copiado.'; }
+    catch(e){ acuse.textContent = 'No se pudo copiar. Seleccione el texto a mano.'; }
+    document.body.removeChild(a);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){ acuse.textContent = 'Texto copiado.'; }, fallback);
+  } else { fallback(); }
+});
+
+})();
+</script>
+</body>
+</html>
